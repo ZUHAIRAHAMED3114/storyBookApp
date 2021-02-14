@@ -1,0 +1,35 @@
+.login-container {
+    width: 400px;
+    margin: 0 500px;
+    padding: 10px 10px;
+    text-align: center;
+}
+
+p {
+    margin: 10px 0;
+}
+
+.loginicon {
+    background: red;
+    margin: 10px;
+}
+
+.loginicon>a {
+    color: white;
+}
+
+.loginicon>a>span {
+    display: inline-block;
+}
+
+.section>p {
+    font-size: 14px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    text-decoration: none;
+}
+
+.img-small {
+    width: 180px;
+}

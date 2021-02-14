@@ -1,0 +1,54 @@
+WELCOME
+<h1>
+    <%= name %>
+</h1>
+<P>Here Your's Stories </P>
+
+<% if(stories.length>0){%>
+    <p>
+        <table class="striped" style="color: black;">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th> </th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% for(var i=0;i< stories.length; i++){ %>
+                    <tr>
+                        <td style="color: red;">
+
+                            <a href="/stories/edit/<%=stories[i]._id%>">
+                                <%=stories[i].title%>
+                            </a>
+
+                        </td>
+                        <td>
+
+                            <%= ejshelper.formatDate(stories[i].createdAt,"YYYY-MM-DD") +' : '+ ejshelper.formatDate(stories[i].createdAt,"HH:mm:ss") %>
+                        </td>
+                        <td>
+                            <%= stories[i].status %>
+                        </td>
+                        <td>
+                            <form action="/stories/<%=stories[i]._id%>" method="POST" id="delete-form">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="btn red">
+                                         <i class="fas fa-trash"></i>
+                                     </button>
+
+                            </form>
+                        </td>
+                    </tr>
+                    <%}%>
+            </tbody>
+        </table>
+    </p>
+    <%}else{%>
+        <p>
+            you have not created any stories
+        </p>
+        <%}%>

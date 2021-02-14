@@ -1,0 +1,425 @@
+                TOPIC-1
+                =======    
+
+    using express-ejs-layout for my project. my project has routing.
+    I want use different layout for different res queries. for example if
+    query is: www.postalcode.com/login, use login.ejs, if query is: www.postalcode.com/dashboar, 
+    use layout.ejs. My index.js part code is:
+
+
+solution :-> 
+    first we have to set all the available layouts as a settings
+    like
+
+    ----
+    app.set('view engine', 'ejs');
+    app.use(expressLayout);
+    app.set('layout', './layouts/layout', './layouts/login');
+    ----
+    
+when ever rendering the files 
+we have to make as follows
+
+    -->
+    
+    Router.get('/', (req, res) => {
+    res.render('login', { layout: './layouts/login' })
+    })
+
+    Router.get('/dashboard', (req, res) => {
+    res.render('Dashboard', { layout: './layouts/layout' });
+    })
+    -->
+===================================================================================================
+                                    TOPIC-2
+                                    =======    
+
+
+lets understand the mongoose model function
+----------------------------------------------------------------------
+
+
+mongoose.Mode=function(arg1,arg2){
+     let modelName=arg1;
+     let modelschema=arg2;    
+
+     function dataSet(){
+
+     }  
+     // instance method 
+     dataSet.prototype.save=function(){
+     
+     }
+    // fatory method to create a instance of the model
+    dataset.create=function(){
+            return {
+                    ...schema,
+            }
+    };
+
+    // inserting bulk of object 
+    dataset.insertMany=funciton(){
+
+    };
+    //how these three are different are discussed in the mongodb notes
+    dataset.update=funciton(){
+
+    }
+    dataset.updateOne=function(){
+
+    }
+    dataset.updateMany=function(){
+
+    }
+    
+    // deleting as folllows
+
+    dataset.deleteOne=function(){
+
+    }
+    dataset.deleteMany=function(){
+
+    }
+
+    // queriying 
+
+    dataset.find=function(){
+
+    }
+
+    dataset.findOne=funciton(){
+
+    }
+
+    // replace 
+
+    dataset.replaceOne=function(){
+
+    }
+
+
+     return dataSet;
+}
+
+the above discussed the some api ... there are remaining various api 
+which will be understand the later....???
+==================================================================================================
+                            TOPIC-3 discussing regarding the oAuth flow 
+                            --------------------------------------------
+ upto :-> 
+    first calling i.e is 
+    ==>==> passport.authenticate('/login',
+                                    ()=>{});
+    second calling i.e is 
+    ==>==> passport.authenticate('/login/callback',
+                                    ()=>{});
+
+ from point-1 to point-6 
+   the architecture flow is  to be discussed ...
+  for the  first calling of the passport.authenticate()
+
+ from point-6 
+  for the second calling of the 
+  passport.authenticate()
+
+
+
+==================================================================================================
+// regarding the session data...
+                                    TOPIC-4
+                                    =======
+
+
+in a typical web application the creadential will authentcate a  web user will only 
+be transmitted by the client during  the login page request...
+if authentication is success then a session will be established and maintained via 
+a cookie in the browser 
+
+so each subsequent requent will not contain creadential, but rather the unique cookie 
+i.e identifies to the session
+
+in order to suppoort login session, passport will serialize and deserialize user interface
+to and from the session i.e is
+
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+        note:-> 
+    serializerUser( arg1)
+
+   argument:-> 
+            take the callback in i.e  
+            1st  callback arguments are like  1st)  is user 
+                                              2nd)  is another callback  
+
+    for i.e another
+     callback mehtod is  :-->  is injected by the passport  so i.e
+     it will take two argument 
+            1) either error
+            2) serialize data instance
+
+
+
+
+
+
+
+
+
+
+
+===================================================================================================
+                                    TOPIC-5
+
+    passport:-> module contain
+                autenticate factory method which will return the 
+                request handler 
+
+                passport.authenticate(arg1,arg2,arg3,arg4......):-> it will return 
+                the request handler i.e is (req,res)=>{
+                                                --> --> -->
+                                                --> --> -->
+                                                 next();
+                                         }
+                  the below sample define the approximately of 
+                  the passport modulet
+
+
+             the below example define the sample like passport module 
+             ==========================================================
+             
+
+               so    ()=>{  
+                       var aftergettingdatacallback=null;
+                       var next=null;
+
+                         funtion authenticate(arg1,arg2){
+
+                                // where  
+                                        arg1:-> is the string to 
+                                                 define what type of strategy
+                                        arg2:-> is the callback function 
+                                                which is called by the middleware   
+
+                                          whose argument  are -> 
+                                                1) wheather succes then call -> 
+                                                2) if any error then what to call 
+                                          
+                                           i.e are like 
+                                              arg2= function(err,user){
+
+                                                }
+
+                                //
+
+                               
+                                return(req,res)=>{
+                                        -->
+                                        -->
+                                        -->
+                                        -->
+                                        /// some function will be invoked 
+                                    req.login=funciton(){}
+                                    next(req,res,aftergettingdata);
+
+                                }
+                         }
+
+                         function use(middleware){
+
+                                next=middleware;
+                         }
+
+                            return {
+                                authenticate:authenticate,
+                                use: use,
+                            }  
+                    
+                     }();
+
+
+                     there are differne strategy like local,google etc...,
+
+
+         the purpose of each startegy is 
+          return 
+                some middleware which is used by the passport object
+
+
+            example :-> 
+                  define the major porcess workflow for the local startegy
+
+                function local(arg1,,...args){
+                    //arg1 is callback 
+                         which take 1) username
+                                    2) password
+                                    3) next
+                    i.e it 
+
+
+                    return (req,res)=>{
+                            -->
+                            -->
+                            -->
+
+                        // this middleware or request handler is stop the
+                            again flow of the reqest procesing 
+
+                            and finally attach the cookie to the
+                            response i.e is setCookie etc..,
+                        // arg1 of the local funciton is called for i.e 
+                        // username and password is upplied by the ....???
+
+                            arg1() 
+                             
+                    }
+                }
+
+
+-->--->--->
+  data from the paasport.js module is described below as follows
+
+
+app.post('login', passport.authentcate('local',callback));
+noth:-> 
+     this define i.e 
+    for login it will define i.e use the 
+              reques handler which will be  return by the 
+               authnticate mehtod which take two argument in which
+               first one is used to define the startegy and the 
+               second argument is to be used for to define the callback 
+               which is nothing but the request handle whilc will take
+               req,res ---> this handler is to be called authentcated the data te 
+
+so concludiong when ever 
+ authentical is succes then this callback is called by the reac 
+
+
+========================================================================
+          topic-6  {how to include the partial view in the ejs tmplate engine}
+          =======
+
+-> views
+ ->layout
+   ->layout.ejs
+   ->login.ejs
+ ->partial
+   ->headers.ejs
+  
+
+our viewengine page is in layout.ejs
+for i.e one -> 
+       to iclude the  ./paritals/header
+
+====================================================================================
+ topic-7:-> forgettent the adding of the session middleware to the app.js file 
+ ----------------------------------------------------------------------------
+  without using this middleware 
+     means application is not using any session :-> 
+     then how will be data is transform form one page to other page
+     throw redirect i.e (302) http:redierct call --> 
+      
+passport.serializeUser((user, done) => {
+     done(null, user.id);
+    });
+   
+    through passpot.js  we will tell which one will be attached as the 
+    cookie and the sessionnd id ..
+  -----------------------------------------------------------------
+  -----------------------------------------------------------------    
+  passport.deserializeUser((id, done) => {
+        User.findById(id, (err, user) => {
+            done(err, user);
+        });
+    });
+  
+  the above method after deserializing this object will 
+  be retrieved...
+
+
+
+
+
+   
+
+   there is no storing of the user data in the 
+   the request object..
+   so req.user will became undefined 
+
+
+
+
+
+====================================================================================
+ topic-8 :-> forgetting the adding of the body parser middleware 
+ ----------------------------------------------------------------
+   without adding this middleware  
+        then req.body will  became undefined
+      
+      so-> 
+  this middleware will parser the  request body data and then
+  finally assign this data to the  req.body object......
+=====================================================================================
+topic-p :-> method overriding 
+  ----------------------------
+  there are two ways to over-ride the http request method 
+   1) using QueryString
+   2) using HttpHeader
+
+How we can do i.e metehod overriding using httpHeaders......
+-----------------------------------------------------
+To use a header to override the method, specify the header name as a string argument to the methodOverride function. To then make the call, send a POST request to a URL with the overridden method as the value of that header. This method of using a header would typically be used in conjunction with XMLHttpRequest on implementations that do not support the method you are trying to use.
+
+var express = require('express')
+var methodOverride = require('method-override')
+var app = express()
+ 
+// override with the X-HTTP-Method-Override header in the request
+app.use(methodOverride('X-HTTP-Method-Override'))
+Example call with header override using XMLHttpRequest:
+
+var xhr = new XMLHttpRequest()
+xhr.onload = onload
+xhr.open('post', '/resource', true)
+xhr.setRequestHeader('X-HTTP-Method-Override', 'DELETE')
+xhr.send()
+ 
+function onload () {
+  alert('got response: ' + this.responseText)
+}
+
+
+2) using the querystring we over ride the method 
+-------------------------------------------------
+
+override using a query value
+To use a query string value to override the method, specify the query string key as a string argument to the methodOverride function. To then make the call, send a POST request to a URL with the overridden method as the value of that query string key. This method of using a query value would typically be used in conjunction with plain HTML <form> elements when trying to support legacy browsers but still use newer methods.
+
+var express = require('express')
+var methodOverride = require('method-override')
+var app = express()
+ 
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'))
+Example call with query override using HTML <form>:
+
+<form method="POST" action="/resource?_method=DELETE">
+  <button type="submit">Delete resource</button>
+</form>
+multiple format support
+var express = require('express')
+var methodOverride = require('method-override')
+var app = express()
+ 
+// override with different headers; last one takes precedence
+app.use(methodOverride('X-HTTP-Method')) //          Microsoft
+app.use(methodOverride('X-HTTP-Method-Override')) // Google/GData
+app.use(methodOverride('X-Method-Override')) //      IBM
